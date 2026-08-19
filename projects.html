@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>冯建峰 · 个人主页</title>
+<title>冯建峰 · 项目作品</title>
 <style>
   :root{--bg:#eef2f7;--bg2:#e3eaf3;--card:#fff;--ink:#1f2a37;--muted:#64748b;
     --line:#e1e7f0;--brand:#1d6fb8;--brand2:#0f9d8a;--accent:#0f9d8a;--warn:#d98324;
@@ -21,7 +21,10 @@
   .blob.b2{width:300px;height:300px;background:#0f9d8a;bottom:8%;left:-90px;animation-delay:-6s}
   @keyframes float{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(30px) translateX(-20px)}}
   .wrap{max-width:980px;margin:0 auto;padding:30px 20px 70px;position:relative;z-index:1}
-  .topbar{display:flex;justify-content:flex-end;margin-bottom:14px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;font-size:13px;color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:transform .2s}
+  .back:hover{transform:scale(1.05);color:var(--brand)}
   .switch{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
     padding:8px 14px;border-radius:999px;cursor:pointer;box-shadow:var(--shadow);font-size:13px;color:var(--muted);transition:transform .2s}
   .switch:hover{transform:scale(1.05)}
@@ -53,14 +56,6 @@
 
   .section-title{font-size:19px;font-weight:700;margin:40px 0 18px;padding-left:13px;border-left:4px solid var(--brand)}
   .section-title small{font-weight:400;color:var(--muted);font-size:13px;margin-left:8px}
-  .about{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);font-size:15px;color:#374151}
-  html[data-theme="dark"] .about{color:#c2cedd}
-
-  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
-  .chip{background:var(--brand);color:#fff;padding:8px 15px;border-radius:999px;font-size:14px;
-    box-shadow:var(--shadow);transition:transform .2s,background .2s}
-  .chip:hover{transform:translateY(-3px);background:var(--brand2)}
-  .chip.alt{background:var(--accent)} .chip.alt:hover{background:var(--warn)}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s}
@@ -75,13 +70,8 @@
   .card li:before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;background:var(--brand);border-radius:50%}
   .card.green li:before{background:var(--accent)} .card.amber li:before{background:var(--warn)}
   .more{max-height:0;overflow:hidden;transition:max-height .4s ease;opacity:0}
-  .card.open .more{max-height:200px;opacity:1;margin-top:10px}
+  .card.open .more{max-height:260px;opacity:1;margin-top:10px}
   .hint{font-size:12px;color:var(--muted);margin-top:10px;font-style:italic}
-
-  .contact{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-  .contact .item{display:flex;align-items:center;gap:12px}
-  .contact .ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--brand);color:#fff;flex:0 0 auto}
-  .contact .k{font-size:12px;color:var(--muted)} .contact .v{font-size:15px;font-weight:600}
 
   footer{margin-top:42px;text-align:center;color:var(--muted);font-size:13px}
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
@@ -92,75 +82,52 @@
 <div class="blob b1"></div><div class="blob b2"></div>
 <div class="wrap">
   <div class="topbar">
+    <a class="back" href="index.html">← 返回主页</a>
     <div class="switch" id="themeBtn" title="切换亮 / 暗主题"><span id="themeTxt">🌙 暗色</span><span class="dot"></span></div>
   </div>
 
   <header class="hero reveal">
     <div class="avatar">冯</div>
     <div class="who">
-      <h1>冯建峰</h1>
-      <div class="role">测量 / 施工工程师</div>
-      <div class="tagline">专注底座板放样 · 土方算量 · 高铁线路坐标计算</div>
+      <h1>项目作品</h1>
+      <div class="role">测量 / 施工工程师 · 工程工具开发</div>
+      <div class="tagline">把繁琐的外业与内业流程，做成可复用的工具</div>
       <div class="hero-meta">
         <span class="pill">📍 陕西西安</span>
-        <span class="pill">💼 可接受项目合作</span>
-        <a class="pill" href="projects.html" style="text-decoration:none">📂 项目作品</a>
         <span class="pill">🌐 fengjianfeng.me</span>
       </div>
     </div>
   </header>
 
   <div class="stats">
-    <div class="stat reveal"><div class="num" data-target="8" data-dec="0">0</div><div class="lab">从业年限（年）</div></div>
-    <div class="stat reveal"><div class="num" data-target="30" data-dec="0">0</div><div class="lab">参与项目（+）</div></div>
-    <div class="stat reveal"><div class="num" data-target="6" data-dec="0">0</div><div class="lab">擅长专业领域</div></div>
+    <div class="stat reveal"><div class="num" data-target="3" data-dec="0">0</div><div class="lab">主线项目</div></div>
+    <div class="stat reveal"><div class="num" data-target="12" data-dec="0">0</div><div class="lab">示意图测量点</div></div>
+    <div class="stat reveal"><div class="num" data-target="20699.951" data-dec="3">0</div><div class="lab">高铁全线里程（m）</div></div>
   </div>
 
-  <div class="section-title reveal">关于我</div>
-  <div class="about reveal">
-    从事施工与工程测量工作，专注底座板放样、土方算量及高铁线路坐标计算等方向。主导开发 Excel VBA 工程项目台账系统与高铁线路坐标计算（正/反算）系统，擅长 CAD 与 Excel 数据打通及 VBA 自动化，熟悉 CASS .dat 格式土方算量数据交换。坚持以工程实用为导向，把繁琐的外业与内业流程做成可复用的工具。
-  </div>
-
-  <div class="section-title reveal">专业领域</div>
-  <div class="chips reveal">
-    <span class="chip">底座板放样</span>
-    <span class="chip alt">土方算量</span>
-    <span class="chip">高铁线路坐标计算（正/反算）</span>
-    <span class="chip alt">CAD ↔ Excel 数据提取</span>
-    <span class="chip">Excel VBA 自动化开发</span>
-    <span class="chip alt">CASS .dat 数据处理</span>
-  </div>
-
-  <div class="section-title reveal">项目作品<small>点击卡片展开细节</small></div>
+  <div class="section-title reveal">三条主线<small>点击卡片展开技术细节</small></div>
   <div class="grid">
     <div class="card reveal" onclick="this.classList.toggle('open')">
       <span class="tag">迭代中</span><h3>Excel VBA 工程项目台账系统</h3>
-      <ul><li>台账页 + 资料页 + 示意图页自动生成</li><li>示意图点动态适配 12/10/8/6/4</li></ul>
-      <div class="more"><ul><li>F 列批量插图片，G 列写文件名与超链接</li><li>自然排序修正数字序列错位</li><li>GBK 编码 + 全中文注释防乱码</li></ul></div>
+      <ul><li>台账页 + 资料页 + 示意图页自动生成</li><li>示意图测量点动态适配 12/10/8/6/4</li></ul>
+      <div class="more"><ul><li>F 列批量插图片，G 列写文件名与超链接</li><li>自然排序修正数字序列文件名错位</li><li>GBK 编码 + 全中文注释防乱码</li><li>资料页/示意图页随台账数据自动刷新</li></ul></div>
       <div class="hint">▸ 点击展开 / 收起</div>
     </div>
     <div class="card green reveal" onclick="this.classList.toggle('open')">
-      <span class="tag green">平行主线</span><h3>高铁线路坐标计算系统</h3>
+      <span class="tag green">平行主线</span><h3>高铁线路坐标计算系统（正/反算）</h3>
       <ul><li>连续弧长里程，全线 20699.951 m</li><li>JD8 前切线断链 0.049 m</li></ul>
-      <div class="more"><ul><li>沿中心线连续弧长里程体系</li><li>断链 11350.000 → 11350.049 校正</li><li>正反算断链区段一致性</li></ul></div>
+      <div class="more"><ul><li>沿线路中心线连续弧长里程体系</li><li>断链校正 11350.000 → 11350.049</li><li>正反算在断链区段里程换算一致</li><li>支持任意里程点坐标正算/反算</li></ul></div>
       <div class="hint">▸ 点击展开 / 收起</div>
     </div>
     <div class="card amber reveal" onclick="this.classList.toggle('open')">
       <span class="tag amber">已打通</span><h3>CAD-to-Excel 数据提取</h3>
-      <ul><li>抽取 → DAT 导出 → K 列按钮</li><li>CASS .dat 土方算量交换</li></ul>
-      <div class="more"><ul><li>端到端数据抽取流程</li><li>截图反馈多轮迭代</li></ul></div>
+      <ul><li>抽取 → DAT 导出 → K 列按钮</li><li>CASS .dat 土方算量数据交换</li></ul>
+      <div class="more"><ul><li>端到端数据抽取流程</li><li>导出 CASS .dat 供土方算量</li><li>K 列生成操作按钮联动</li><li>截图反馈多轮迭代稳定</li></ul></div>
       <div class="hint">▸ 点击展开 / 收起</div>
     </div>
   </div>
 
-  <div class="section-title reveal">联系方式</div>
-  <div class="contact reveal">
-    <div class="item"><div class="ic">✉</div><div><div class="k">邮箱</div><div class="v">1619397513@qq.com</div></div></div>
-    <div class="item"><div class="ic">📱</div><div><div class="k">电话</div><div class="v">16536662008</div></div></div>
-    <div class="item"><div class="ic">🌐</div><div><div class="k">个人域名</div><div class="v">fengjianfeng.me</div></div></div>
-  </div>
-
-  <footer>冯建峰 · 个人主页 · 含明暗主题、数字动画、卡片展开与滚动揭示 · 域名 fengjianfeng.me 待绑定</footer>
+  <footer>冯建峰 · 项目作品 · 风格与主页一致 · 返回 <a href="index.html" style="color:var(--brand);text-decoration:none">fengjianfeng.me</a></footer>
 </div>
 
 <script>
