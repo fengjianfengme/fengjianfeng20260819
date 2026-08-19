@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>冯建峰 · 抖音作品</title>
+<style>
+  :root{--bg:#eef2f7;--bg2:#e3eaf3;--card:#fff;--ink:#1f2a37;--muted:#64748b;
+    --line:#e1e7f0;--brand:#1d6fb8;--brand2:#0f9d8a;--accent:#0f9d8a;--warn:#d98324;
+    --glow:rgba(29,111,184,.35);--shadow:0 8px 30px rgba(31,42,55,.10);--radius:16px}
+  html[data-theme="dark"]{--bg:#0e1622;--bg2:#0b121c;--card:#16202e;--ink:#e8eef6;
+    --muted:#93a4b8;--line:#263445;--brand:#4ea3e6;--brand2:#27c2ab;--accent:#27c2ab;
+    --warn:#e8a04a;--glow:rgba(78,163,230,.45);--shadow:0 8px 30px rgba(0,0,0,.45)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;
+    background:radial-gradient(1200px 600px at 80% -10%,var(--bg2),var(--bg));
+    color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+    transition:background .4s,color .4s}
+  .blob{position:fixed;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;pointer-events:none;animation:float 14s ease-in-out infinite}
+  .blob.b1{width:340px;height:340px;background:#1d6fb8;top:-80px;right:-60px}
+  .blob.b2{width:300px;height:300px;background:#0f9d8a;bottom:8%;left:-90px;animation-delay:-6s}
+  @keyframes float{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(30px) translateX(-20px)}}
+  .wrap{max-width:980px;margin:0 auto;padding:30px 20px 70px;position:relative;z-index:1}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;font-size:13px;color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:transform .2s}
+  .back:hover{transform:scale(1.05);color:var(--brand)}
+  .switch{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;cursor:pointer;box-shadow:var(--shadow);font-size:13px;color:var(--muted);transition:transform .2s}
+  .switch:hover{transform:scale(1.05)}
+  .switch .dot{width:34px;height:18px;border-radius:999px;background:var(--line);position:relative;transition:.3s}
+  .switch .dot:after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--brand);transition:.3s}
+  html[data-theme="dark"] .switch .dot{background:#2c3e52}
+  html[data-theme="dark"] .switch .dot:after{left:18px}
+
+  .hero{position:relative;background:linear-gradient(135deg,#1d6fb8,#0f9d8a 72%);color:#fff;
+    border-radius:22px;padding:40px 34px;box-shadow:var(--shadow);overflow:hidden;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+  .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.18) 50%,transparent 70%);transform:translateX(-100%);animation:shine 5s infinite}
+  @keyframes shine{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+  .avatar{width:118px;height:118px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    font-size:46px;font-weight:800;background:rgba(255,255,255,.22);border:3px solid rgba(255,255,255,.5);
+    box-shadow:0 8px 24px rgba(0,0,0,.2);object-fit:cover}
+  .hero .who{position:relative;z-index:1;flex:1;min-width:240px}
+  .hero h1{font-size:30px;font-weight:800;letter-spacing:1px}
+  .hero .role{font-size:16px;opacity:.95;margin-top:6px}
+  .hero .tagline{opacity:.9;margin-top:8px;font-size:14px}
+  .hero-meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px}
+  .pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:6px 13px;border-radius:999px;font-size:13px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .stat .num{font-size:30px;font-weight:800;background:linear-gradient(135deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .lab{font-size:13px;color:var(--muted);margin-top:4px}
+  .stat:after{content:"";position:absolute;bottom:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width 1.2s ease}
+  .stat.in:after{width:100%}
+
+  .section-title{font-size:19px;font-weight:700;margin:40px 0 18px;padding-left:13px;border-left:4px solid var(--brand)}
+  .section-title small{font-weight:400;color:var(--muted);font-size:13px;margin-left:8px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+  .vcard{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+    transition:transform .25s,box-shadow .25s,border-color .25s}
+  .vcard:hover{transform:translateY(-6px);box-shadow:0 16px 40px var(--glow);border-color:var(--brand)}
+  .cover{position:relative;height:172px;background:linear-gradient(135deg,#25F4EE 0%,#0b0b0b 50%,#FE2C55 100%);
+    display:flex;align-items:center;justify-content:center}
+  .cover .play{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.92);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .cover .play:before{content:"";border-left:19px solid #111;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+  .cover .tag-dy{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 11px;border-radius:999px}
+  .vbody{padding:18px 20px}
+  .vbody h3{font-size:16px;color:var(--ink);margin-bottom:8px;line-height:1.45}
+  .vbody .acct{font-size:13px;color:var(--muted)}
+  .vbody .go{margin-top:12px;display:inline-flex;align-items:center;gap:6px;color:var(--brand);font-size:14px;font-weight:600}
+  html[data-theme="dark"] .vbody h3{color:#e8eef6}
+
+  .note{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;
+    box-shadow:var(--shadow);font-size:14px;color:var(--muted);margin-top:22px}
+  .note b{color:var(--brand)}
+
+  footer{margin-top:42px;text-align:center;color:var(--muted);font-size:13px}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← 返回主页</a>
+    <div class="switch" id="themeBtn" title="切换亮 / 暗主题"><span id="themeTxt">🌙 暗色</span><span class="dot"></span></div>
+  </div>
+
+  <header class="hero reveal">
+    <div class="avatar">冯</div>
+    <div class="who">
+      <h1>抖音作品</h1>
+      <div class="role">测量 / 施工工程师 · 工程实战演示</div>
+      <div class="tagline">点开卡片即可跳转抖音观看完整视频</div>
+      <div class="hero-meta">
+        <span class="pill">📍 陕西西安</span>
+        <span class="pill">🌐 fengjianfeng.me</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat reveal"><div class="num" data-target="1" data-dec="0">0</div><div class="lab">已展示作品</div></div>
+    <div class="stat reveal"><div class="num" data-target="1" data-dec="0">0</div><div class="lab">抖音账号</div></div>
+    <div class="stat reveal"><div class="num" data-target="0" data-dec="0">0</div><div class="lab">待添加</div></div>
+  </div>
+
+  <div class="section-title reveal">作品列表<small>点击卡片跳转抖音</small></div>
+  <div class="grid">
+
+    <a class="vcard reveal" href="https://v.douyin.com/WzElIW1BJV0/" target="_blank" rel="noopener">
+      <div class="cover"><span class="tag-dy">抖音 · 大黑牛</span><span class="play"></span></div>
+      <div class="vbody">
+        <h3>CASS二期土方计算全过程 · 断面里程+偏距+高程提取</h3>
+        <div class="acct">作者：大黑牛</div>
+        <div class="go">▶ 在抖音打开观看</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="note reveal">
+    <b>想加更多视频？</b> 把你的抖音视频链接（或主页链接）发给我，我直接在这里加一张跳转卡片即可——抖音视频无法像 B 站那样内嵌播放，所以用"点开跳转"的方式最稳，也不占网站流量。
+  </div>
+
+  <footer>冯建峰 · 抖音作品 · 风格与主页一致 · 返回 <a href="index.html" style="color:var(--brand);text-decoration:none">fengjianfeng.me</a></footer>
+</div>
+
+<script>
+  const root=document.documentElement,btn=document.getElementById('themeBtn'),txt=document.getElementById('themeTxt');
+  btn.onclick=()=>{const d=root.getAttribute('data-theme')==='dark';
+    root.setAttribute('data-theme',d?'light':'dark');txt.textContent=d?'🌙 暗色':'☀️ 亮色';};
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+    if(e.target.classList.contains('stat')){const n=e.target.querySelector('.num'),t=parseFloat(n.dataset.target),dec=parseInt(n.dataset.dec);
+      let c=0,step=t/60;const tk=()=>{c+=step;if(c>=t)c=t;n.textContent=dec?c.toFixed(dec):Math.floor(c).toLocaleString();if(c<t)requestAnimationFrame(tk);};tk();}
+    io.unobserve(e.target);}});},{threshold:.18});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
