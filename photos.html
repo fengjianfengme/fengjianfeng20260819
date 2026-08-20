@@ -101,8 +101,9 @@ footer{text-align:center;color:var(--muted);font-size:13px;margin-top:50px}
 </div>
 
 <script>
-// ===== 改成你自己的函数计算 HTTP 触发器地址（部署 FC 后拿到）=====
+// ===== 后端地址：默认用阿里云 FC，若 fcapp.run 被网络拦截可换成 Cloudflare Workers =====
 const SIGN_URL = "https://oss-sign-cgchjulocx.cn-beijing.fcapp.run";
+const BACKUP_URL = "https://fengjianfeng-photos.1619397513.workers.dev"; // Cloudflare Worker 备用后端
 const DIR = "photos/";
 
 // 主题切换
@@ -124,6 +125,24 @@ function closeLightbox(){document.getElementById('lightbox').classList.remove('s
 document.getElementById('lightbox').addEventListener('click',function(e){if(e.target.id==='lightbox')closeLightbox();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLightbox();});
 
+// 请求后端：主地址失败时自动尝试备用地址
+async function fetchAPI(action){
+  async function tryOne(base){
+    var r=await fetch(base+'?action='+action);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  }
+  try{
+    return await tryOne(SIGN_URL);
+  }catch(e){
+    if(BACKUP_URL){
+      try{ return await tryOne(BACKUP_URL); }
+      catch(e2){ throw new Error('主备后端均失败：'+e2.message); }
+    }
+    throw e;
+  }
+}
+
 // 上传
 var statusEl=document.getElementById('status');
 document.getElementById('file').addEventListener('change',async function(){
@@ -132,7 +151,7 @@ document.getElementById('file').addEventListener('change',async function(){
   if(file.size>10*1024*1024){statusEl.className='err';statusEl.textContent='图片不能超过 10MB';return;}
   statusEl.className='';statusEl.textContent='正在上传…';
   try{
-    var sig=await (await fetch(SIGN_URL+'?action=signature')).json();
+    var sig=await fetchAPI('signature');
     var key=sig.dir+Date.now()+'_'+file.name.replace(/\s+/g,'_');
     var fd=new FormData();
     fd.append('OSSAccessKeyId',sig.accessid);
@@ -147,7 +166,7 @@ document.getElementById('file').addEventListener('change',async function(){
     this.value='';
     setTimeout(loadGallery,800);
   }catch(err){
-    statusEl.className='err';statusEl.textContent='上传失败：'+err.message+'（请确认 SIGN_URL 已替换为你的函数地址）';
+    statusEl.className='err';statusEl.textContent='上传失败：'+err.message+'。当前网络可能无法访问上传服务，请换用手机流量/家庭网络再试。';
   }
 });
 
@@ -156,9 +175,9 @@ async function loadGallery(){
   var grid=document.getElementById('grid'), count=document.getElementById('count');
   count.textContent='正在加载相册…';
   try{
-    var data=await (await fetch(SIGN_URL+'?action=list')).json();
-    var urls=data.urls||[];
+    var data=await fetchAPI('list');
     if(data.error){count.textContent='加载失败：'+data.error;return;}
+    var urls=data.urls||[];
     if(urls.length===0){count.textContent='还没有照片，快来上传第一张吧！';grid.innerHTML='';return;}
     count.textContent='共 '+urls.length+' 张照片';
     grid.innerHTML='';
