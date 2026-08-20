@@ -7,7 +7,7 @@
 <style>
 :root{
   --bg:#eef2f9; --bg2:#e3e9f5; --card:rgba(255,255,255,.72); --text:#1c2433; --muted:#5b6679;
-  --blue:#4f8cff; --purple:#a06bff; --cyan:#2fd6c6; --line:rgba(20,30,60,.10); --ok:#2bb673; --err:#e3544b;
+  --blue:#4f8cff; --purple:#a06bff; --cyan:#2fd6c6; --line:rgba(20,30,60,.10);
 }
 body.dark{
   --bg:#0c1020; --bg2:#141d33; --card:rgba(255,255,255,.06); --text:#e8edf7; --muted:#9aa6bd;
@@ -25,7 +25,7 @@ body{
   background-attachment:fixed;
   transition:background .5s ease,color .4s ease;
 }
-.wrap{max-width:1100px;margin:0 auto;padding:26px 20px 80px}
+.wrap{max-width:1000px;margin:0 auto;padding:26px 20px 80px}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
 .back{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;
   background:var(--card);border:1px solid var(--line);color:var(--text);text-decoration:none;
@@ -36,38 +36,27 @@ body{
   backdrop-filter:blur(12px);transition:.25s}
 .switch:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(160,107,255,.22)}
 .switch .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple))}
-.hero{text-align:center;padding:18px 0 8px}
+.hero{text-align:center;padding:18px 0 10px}
 .hero h1{font-size:34px;letter-spacing:1px;
   background:linear-gradient(120deg,var(--blue),var(--purple),var(--cyan));
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .sub{color:var(--muted);margin-top:6px}
-.uploader{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;
-  backdrop-filter:blur(14px);text-align:center;margin:22px 0;box-shadow:0 10px 30px rgba(15,25,55,.08)}
-.uploader h3{font-size:18px;margin-bottom:6px}
-.uploader p{color:var(--muted);font-size:13px;margin-bottom:14px}
-.uploader input[type=file]{font-size:14px}
-#status{margin-top:12px;font-size:14px;min-height:20px}
-#status.ok{color:var(--ok)} #status.err{color:var(--err)}
-.count{text-align:center;color:var(--muted);font-size:13px;margin:6px 0 14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
-.ph{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;
-  backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(15,25,55,.08);
-  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
-.ph:hover{transform:translateY(-6px) scale(1.015);box-shadow:0 18px 44px rgba(79,140,255,.30)}
-.ph img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;cursor:zoom-in;transition:transform .5s}
-.ph:hover img{transform:scale(1.06)}
-#lightbox{position:fixed;inset:0;background:rgba(6,9,18,.92);display:none;align-items:center;
-  justify-content:center;flex-direction:column;z-index:200;padding:24px;backdrop-filter:blur(6px)}
-#lightbox.show{display:flex;animation:fade .25s ease}
-#lightbox img{max-width:92vw;max-height:82vh;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.6)}
-#lbClose{position:absolute;top:20px;right:26px;color:#fff;font-size:32px;cursor:pointer;
-  width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12)}
-@keyframes fade{from{opacity:0}to{opacity:1}}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:26px}
+.album{display:flex;flex-direction:column;gap:10px;background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:22px;backdrop-filter:blur(14px);cursor:pointer;text-decoration:none;
+  color:var(--text);box-shadow:0 10px 30px rgba(15,25,55,.08);transition:transform .3s,box-shadow .3s}
+.album:hover{transform:translateY(-5px);box-shadow:0 18px 46px rgba(79,140,255,.30)}
+.album .ico{font-size:36px;line-height:1}
+.album .t{font-size:18px;font-weight:700}
+.album .src{display:inline-block;font-size:12px;padding:3px 11px;border-radius:999px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;width:fit-content}
+.album .d{color:var(--muted);font-size:13px}
+.album .go{margin-top:4px;color:var(--blue);font-size:14px;font-weight:600}
+.note{text-align:center;color:var(--muted);font-size:13px;margin-top:24px}
 footer{text-align:center;color:var(--muted);font-size:13px;margin-top:50px}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
-@media (max-width:560px){.hero h1{font-size:26px}.grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+@media (max-width:560px){.hero h1{font-size:26px}.cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -79,33 +68,17 @@ footer{text-align:center;color:var(--muted);font-size:13px;margin-top:50px}
 
   <header class="hero reveal">
     <h1>照片墙</h1>
-    <div class="sub">冯建峰 · 公共相册 · 任何人都能上传，所有人都能看到</div>
+    <div class="sub">冯建峰 · 相册导航 · 点击进入各平台相册</div>
   </header>
 
-  <div class="uploader reveal">
-    <h3>📤 上传照片</h3>
-    <p>选择一张图片（≤10MB），上传后会立刻出现在下方相册，所有人都能看到。</p>
-    <input type="file" id="file" accept="image/*">
-    <div id="status"></div>
-  </div>
+  <div class="cards" id="cards"></div>
 
-  <div class="count" id="count">正在加载相册…</div>
-  <div class="grid" id="grid"></div>
+  <div class="note">还想加 QQ 相册或其他网盘？把分享链接发我，我帮你加进来。</div>
 
-  <footer>冯建峰 · 照片墙 · 明暗主题 / 点击放大 / 所有人可上传 · fengjianfeng.me</footer>
-</div>
-
-<div id="lightbox">
-  <div id="lbClose" onclick="closeLightbox()">×</div>
-  <img id="lbImg" src="" alt="">
+  <footer>冯建峰 · 照片墙 · 明暗主题 · fengjianfeng.me</footer>
 </div>
 
 <script>
-// ===== 后端地址：默认用阿里云 FC，若 fcapp.run 被网络拦截可换成 Cloudflare Workers =====
-const SIGN_URL = "https://oss-sign-cgchjulocx.cn-beijing.fcapp.run";
-const BACKUP_URL = "https://fengjianfeng-photos.1619397513.workers.dev"; // Cloudflare Worker 备用后端
-const DIR = "photos/";
-
 // 主题切换
 (function(){
   var b=document.body, btn=document.getElementById('themeBtn'), txt=document.getElementById('themeTxt');
@@ -114,84 +87,27 @@ const DIR = "photos/";
     txt.textContent=d?'☀️ 亮色':'🌙 暗色';localStorage.setItem('ff_theme',d?'dark':'light');};
 })();
 
+// 相册列表（以后加 QQ 相册，往这个数组里加一条即可）
+var ALBUMS=[
+  {ico:'📦', title:'冯建峰荣耀200相册整理', src:'百度网盘', desc:'共 200 张照片 · 百度网盘分享', url:'https://pan.baidu.com/s/5F18TE0t3D7isC9T8T81bQA'}
+];
+
+var cards=document.getElementById('cards');
+ALBUMS.forEach(function(a){
+  var el=document.createElement('a');
+  el.className='album reveal';
+  el.href=a.url; el.target='_blank'; el.rel='noopener';
+  el.innerHTML='<div class="ico">'+a.ico+'</div>'+
+    '<div class="t">'+a.title+'</div>'+
+    '<span class="src">'+a.src+'</span>'+
+    '<div class="d">'+a.desc+'</div>'+
+    '<div class="go">点击进入相册 →</div>';
+  cards.appendChild(el);
+});
+
 // 滚动揭示
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-
-// 灯箱
-function openLightbox(img){var lb=document.getElementById('lightbox');
-  document.getElementById('lbImg').src=img.src;lb.classList.add('show');}
-function closeLightbox(){document.getElementById('lightbox').classList.remove('show');}
-document.getElementById('lightbox').addEventListener('click',function(e){if(e.target.id==='lightbox')closeLightbox();});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLightbox();});
-
-// 请求后端：主地址失败时自动尝试备用地址
-async function fetchAPI(action){
-  async function tryOne(base){
-    var r=await fetch(base+'?action='+action);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    return await r.json();
-  }
-  try{
-    return await tryOne(SIGN_URL);
-  }catch(e){
-    if(BACKUP_URL){
-      try{ return await tryOne(BACKUP_URL); }
-      catch(e2){ throw new Error('主备后端均失败：'+e2.message); }
-    }
-    throw e;
-  }
-}
-
-// 上传
-var statusEl=document.getElementById('status');
-document.getElementById('file').addEventListener('change',async function(){
-  var file=this.files[0]; if(!file) return;
-  if(!file.type.startsWith('image/')){statusEl.className='err';statusEl.textContent='只能上传图片文件';return;}
-  if(file.size>10*1024*1024){statusEl.className='err';statusEl.textContent='图片不能超过 10MB';return;}
-  statusEl.className='';statusEl.textContent='正在上传…';
-  try{
-    var sig=await fetchAPI('signature');
-    var key=sig.dir+Date.now()+'_'+file.name.replace(/\s+/g,'_');
-    var fd=new FormData();
-    fd.append('OSSAccessKeyId',sig.accessid);
-    fd.append('policy',sig.policy);
-    fd.append('signature',sig.signature);
-    fd.append('key',key);
-    fd.append('Content-Type',file.type);
-    fd.append('file',file);
-    var res=await fetch(sig.host,{method:'POST',body:fd});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    statusEl.className='ok';statusEl.textContent='✅ 上传成功！';
-    this.value='';
-    setTimeout(loadGallery,800);
-  }catch(err){
-    statusEl.className='err';statusEl.textContent='上传失败：'+err.message+'。当前网络可能无法访问上传服务，请换用手机流量/家庭网络再试。';
-  }
-});
-
-// 加载相册
-async function loadGallery(){
-  var grid=document.getElementById('grid'), count=document.getElementById('count');
-  count.textContent='正在加载相册…';
-  try{
-    var data=await fetchAPI('list');
-    if(data.error){count.textContent='加载失败：'+data.error;return;}
-    var urls=data.urls||[];
-    if(urls.length===0){count.textContent='还没有照片，快来上传第一张吧！';grid.innerHTML='';return;}
-    count.textContent='共 '+urls.length+' 张照片';
-    grid.innerHTML='';
-    urls.forEach(function(u){
-      var fig=document.createElement('figure');fig.className='ph reveal';
-      var img=document.createElement('img');img.loading='lazy';img.src=u;img.alt='';img.onclick=function(){openLightbox(this);};
-      fig.appendChild(img);grid.appendChild(fig);io.observe(fig);
-    });
-  }catch(err){
-    count.textContent='加载失败：'+err.message;
-  }
-}
-loadGallery();
-setInterval(loadGallery, 30000); // 每30秒自动刷新，看到别人新传的图
 </script>
 </body>
 </html>
