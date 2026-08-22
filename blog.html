@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技术博客 · 冯建峰</title>
+<style>
+:root{
+  --bg:#eef2f9; --bg2:#e3e9f5; --card:rgba(255,255,255,.78); --text:#1c2433; --muted:#5b6679;
+  --blue:#4f8cff; --purple:#a06bff; --cyan:#2fd6c6; --line:rgba(20,30,60,.12);
+}
+body.dark{
+  --bg:#0c1020; --bg2:#141d33; --card:rgba(255,255,255,.06); --text:#e8edf7; --muted:#9aa6bd;
+  --line:rgba(255,255,255,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:var(--text); min-height:100vh; line-height:1.7;
+  background:
+    radial-gradient(1200px 600px at 12% -8%, rgba(79,140,255,.20), transparent 60%),
+    radial-gradient(1000px 520px at 92% 4%, rgba(160,107,255,.20), transparent 60%),
+    radial-gradient(900px 500px at 50% 110%, rgba(47,214,198,.16), transparent 60%),
+    linear-gradient(160deg,var(--bg),var(--bg2));
+  background-attachment:fixed; transition:background .5s ease,color .4s ease; padding-bottom:60px;
+}
+.wrap{max-width:860px;margin:0 auto;padding:26px 20px 40px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.back,.switch{cursor:pointer;padding:8px 14px;border-radius:999px;background:var(--card);
+  border:1px solid var(--line);color:var(--text);font-size:14px;display:flex;gap:8px;align-items:center;
+  backdrop-filter:blur(12px);transition:.25s;text-decoration:none}
+.back:hover,.switch:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,140,255,.25)}
+.switch .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple))}
+.hero{text-align:center;padding:14px 0 6px}
+.hero h1{font-size:30px;letter-spacing:1px;
+  background:linear-gradient(120deg,var(--blue),var(--purple),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{color:var(--muted);margin-top:4px;font-size:14px}
+.list{margin-top:22px;display:flex;flex-direction:column;gap:14px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;
+  backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(15,25,55,.08);cursor:pointer;transition:.25s}
+.post:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(79,140,255,.25)}
+.post .date{font-size:12px;color:var(--muted)}
+.post h2{font-size:19px;margin:6px 0 8px;color:var(--blue)}
+.post p{color:var(--muted);font-size:14px}
+.post .more{color:var(--purple);font-size:13px;font-weight:600;margin-top:8px}
+.article{display:none;background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:26px 28px;backdrop-filter:blur(14px);box-shadow:0 12px 34px rgba(15,25,55,.10)}
+.article.show{display:block}
+.article h2{font-size:24px;margin-bottom:6px;background:linear-gradient(120deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.article .meta{font-size:13px;color:var(--muted);margin-bottom:16px}
+.article h3{font-size:17px;margin:18px 0 8px;color:var(--cyan)}
+.article p{margin:10px 0;font-size:15px;color:#374151}
+body.dark .article p{color:#c2cedd}
+.article code{background:rgba(79,140,255,.12);padding:2px 6px;border-radius:6px;font-size:13px;font-family:Consolas,monospace}
+.article ul{margin:8px 0 8px 22px} .article li{margin:6px 0;font-size:15px}
+.article pre{background:rgba(20,30,60,.06);padding:14px;border-radius:10px;overflow:auto;font-size:13px;font-family:Consolas,monospace;margin:10px 0}
+body.dark .article pre{background:rgba(255,255,255,.05)}
+.backbtn{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:7px 13px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);color:var(--text);font-size:13px;cursor:pointer}
+.backbtn:hover{transform:translateY(-2px)}
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:36px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (max-width:560px){.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← 返回主页</a>
+    <div class="switch" id="themeBtn" title="切换亮 / 暗主题"><span id="themeTxt">🌙 暗色</span><span class="dot"></span></div>
+  </div>
+
+  <header class="hero reveal">
+    <h1>技术博客</h1>
+    <div class="sub">工程测量与 VBA 自动化经验笔记</div>
+  </header>
+
+  <!-- 列表 -->
+  <div class="list reveal" id="list">
+    <div class="post" data-id="a1">
+      <div class="date">2026-08 · 工程台账</div>
+      <h2>Excel VBA 工程项目台账系统：从零搭建思路</h2>
+      <p>台账页、资料页、示意图页三层结构怎么分工；示意图测量点如何动态适配 12/10/8/6/4；图片批量插入与文件名自然排序的坑。</p>
+      <div class="more">阅读全文 →</div>
+    </div>
+    <div class="post" data-id="a2">
+      <div class="date">2026-08 · 线路测量</div>
+      <h2>高铁线路坐标正/反算与断链处理笔记</h2>
+      <p>沿线路中心线连续弧长里程体系；JD8 前短链 0.049 m 的来龙去脉；反算桩号时如何正确归算断链后里程。</p>
+      <div class="more">阅读全文 →</div>
+    </div>
+  </div>
+
+  <!-- 文章 -->
+  <div class="article" id="a1">
+    <div class="backbtn" onclick="showList()">← 返回列表</div>
+    <h2>Excel VBA 工程项目台账系统：从零搭建思路</h2>
+    <div class="meta">冯建峰 · 2026-08 · 工程台账</div>
+    <p>做工程项目台账，核心是把<strong>外业记录</strong>和<strong>内业资料</strong>用一套数据串起来。我的思路是分三页：</p>
+    <h3>一、三层页面分工</h3>
+    <ul>
+      <li><code>台账页</code>：人工录入基础数据（桩号、部位、工程量、日期等），是唯一的"数据源"。</li>
+      <li><code>资料页</code>：从台账页自动生成，按规范格式排版，直接打印或导出。</li>
+      <li><code>示意图页</code>：根据台账里的测量点自动画示意图。</li>
+    </ul>
+    <h3>二、示意图测量点的动态适配</h3>
+    <p>现场测量点数量会变化，示意图不能写死。默认 12 个点，按实际数据**动态缩减为 10 / 8 / 6 / 4**，靠 VBA 判断有效行数后控制绘图区域。</p>
+    <h3>三、两个最容易踩的坑</h3>
+    <ul>
+      <li><strong>图片批量插入</strong>：F 列插图、G 列写文件名与超链接，要先用 <code>Dir</code> 校验文件存在，避免断链。</li>
+      <li><strong>文件名排序</strong>：数字序列文件名（<code>1.jpg、2.jpg、10.jpg</code>）必须用<strong>自然排序</strong>，否则会被排成 <code>1、10、2…</code>。字典序是常见错误。</li>
+    </ul>
+    <h3>四、编码与注释</h3>
+    <p>文件统一用 <code>GBK/GB2312</code> 编码，VBA 全程中文注释，避免出现中文乱码，也方便同事接手维护。</p>
+    <pre>' 自然排序比较函数（按数值段拆分）
+Function 自然比较(a As String, b As String) As Integer
+    ' 将 "12_放样.jpg" 拆成 数字段+文本段 逐段比较
+End Function</pre>
+    <p>整套系统跑顺之后，台账一填、资料页和示意图页自动出，省下的全是重复劳动。</p>
+  </div>
+
+  <div class="article" id="a2">
+    <div class="backbtn" onclick="showList()">← 返回列表</div>
+    <h2>高铁线路坐标正/反算与断链处理笔记</h2>
+    <div class="meta">冯建峰 · 2026-08 · 线路测量</div>
+    <p>高铁线路坐标计算，关键是<strong>里程体系</strong>的定义。我这套系统采用沿线路中心线<strong>连续弧长里程</strong>，全线总长 <code>20699.951 m</code>。</p>
+    <h3>一、正算：里程 → 坐标</h3>
+    <p>给定任意里程，先判断落在哪一段（直线 / 缓和曲线 / 圆曲线），再用对应的参数方程求坐标与切线方位角。带缓和曲线时：</p>
+    <ul>
+      <li>缓和段：<code>x = l − l⁵/(40R²Ls²)</code>，<code>y = ±l³/(6RLs)</code></li>
+      <li>圆曲线段：以 HY 为起点按弧长递推</li>
+    </ul>
+    <h3>二、反算：坐标 → 里程</h3>
+    <p>给定坐标反求最近里程，本质是迭代逼近——先粗定位到邻近里程，再在切向做一维搜索收敛。</p>
+    <h3>三、断链处理（重点）</h3>
+    <p>本线在 <strong>JD8 前切线</strong>存在一处断链：</p>
+    <pre>断链前里程 11350.000
+断链后里程 11350.049
+差值       +0.049 m  （短链）</pre>
+    <p>断链意味着"同一个物理点有两套桩号"。正反算时必须先判断输入里程位于哪个断链区间，<strong>用断链后里程做坐标解算</strong>，否则会差出 0.049 m——对高铁来说就是不容许的偏差。</p>
+    <p>换算关系很简单：<code>断链后 = 断链前 + (断链后桩号 − 断链前桩号)</code>，但一定要确认待换算里程<strong>在该断链点之后</strong>。</p>
+    <p>这套正反算逻辑我后来也做成了网页版小工具（见主页「🛠️ 工具」），手机上也能随手算。</p>
+  </div>
+
+  <footer>冯建峰 · 技术博客 · fengjianfeng.me</footer>
+</div>
+
+<script>
+(function(){
+  var b=document.body, btn=document.getElementById('themeBtn'), txt=document.getElementById('themeTxt');
+  if(localStorage.getItem('ff_theme')==='dark'){b.classList.add('dark');txt.textContent='☀️ 亮色';}
+  btn.onclick=function(){b.classList.toggle('dark');var d=b.classList.contains('dark');
+    txt.textContent=d?'☀️ 亮色':'🌙 暗色';localStorage.setItem('ff_theme',d?'dark':'light');};
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  // 列表 ⇄ 文章
+  document.querySelectorAll('.post').forEach(function(p){
+    p.onclick=function(){document.getElementById('list').style.display='none';
+      document.getElementById(p.dataset.id).classList.add('show');window.scrollTo(0,0);};
+  });
+})();
+function showList(){
+  document.querySelectorAll('.article').forEach(function(a){a.classList.remove('show');});
+  document.getElementById('list').style.display='flex';window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

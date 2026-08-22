@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>测量小工具 · 冯建峰</title>
+<style>
+:root{
+  --bg:#eef2f9; --bg2:#e3e9f5; --card:rgba(255,255,255,.78); --text:#1c2433; --muted:#5b6679;
+  --blue:#4f8cff; --purple:#a06bff; --cyan:#2fd6c6; --line:rgba(20,30,60,.12); --ok:#1d9d6b; --warn:#d98324;
+}
+body.dark{
+  --bg:#0c1020; --bg2:#141d33; --card:rgba(255,255,255,.06); --text:#e8edf7; --muted:#9aa6bd;
+  --line:rgba(255,255,255,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:var(--text); min-height:100vh; line-height:1.6;
+  background:
+    radial-gradient(1200px 600px at 12% -8%, rgba(79,140,255,.20), transparent 60%),
+    radial-gradient(1000px 520px at 92% 4%, rgba(160,107,255,.20), transparent 60%),
+    radial-gradient(900px 500px at 50% 110%, rgba(47,214,198,.16), transparent 60%),
+    linear-gradient(160deg,var(--bg),var(--bg2));
+  background-attachment:fixed;
+  transition:background .5s ease,color .4s ease;
+  padding-bottom:60px;
+}
+.wrap{max-width:960px;margin:0 auto;padding:26px 20px 40px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.back,.switch{cursor:pointer;padding:8px 14px;border-radius:999px;background:var(--card);
+  border:1px solid var(--line);color:var(--text);font-size:14px;display:flex;gap:8px;align-items:center;
+  backdrop-filter:blur(12px);transition:.25s;text-decoration:none}
+.back:hover,.switch:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,140,255,.25)}
+.switch .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple))}
+.hero{text-align:center;padding:14px 0 6px}
+.hero h1{font-size:30px;letter-spacing:1px;
+  background:linear-gradient(120deg,var(--blue),var(--purple),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{color:var(--muted);margin-top:4px;font-size:14px}
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:22px 0 10px}
+.tab{padding:9px 16px;border-radius:999px;background:var(--card);border:1px solid var(--line);
+  color:var(--muted);font-size:14px;cursor:pointer;transition:.2s}
+.tab.active{color:#fff;background:linear-gradient(135deg,var(--blue),var(--purple));border-color:transparent;font-weight:600}
+.panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:22px;backdrop-filter:blur(14px);box-shadow:0 12px 34px rgba(15,25,55,.10);margin-top:8px}
+.panel.active{display:block}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:13px;color:var(--muted)}
+.fld input,.fld select{padding:10px 12px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.6);color:var(--text);font-size:14px;font-family:inherit}
+body.dark .fld input,body.dark .fld select{background:rgba(255,255,255,.05)}
+.fld input:focus,.fld select:focus{outline:2px solid var(--blue);border-color:transparent}
+.btn{margin-top:6px;padding:11px 22px;border:none;border-radius:12px;cursor:pointer;font-size:15px;font-weight:600;
+  color:#fff;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 8px 22px rgba(79,140,255,.30);transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.out{margin-top:16px;padding:16px;border-radius:12px;background:rgba(79,140,255,.08);
+  border:1px dashed var(--line);font-family:"Consolas",monospace;font-size:14px;white-space:pre-wrap;color:var(--text);min-height:48px}
+.out.err{background:rgba(217,131,36,.12);color:var(--warn)}
+.hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.7}
+.note{font-size:12px;color:var(--muted);margin-top:14px;padding:10px 12px;border-left:3px solid var(--cyan);background:rgba(47,214,198,.08);border-radius:0 8px 8px 0}
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:36px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (max-width:560px){.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← 返回主页</a>
+    <div class="switch" id="themeBtn" title="切换亮 / 暗主题"><span id="themeTxt">🌙 暗色</span><span class="dot"></span></div>
+  </div>
+
+  <header class="hero reveal">
+    <h1>测量小工具</h1>
+    <div class="sub">坐标正 / 反算 · 平曲线里程→坐标 · 断链换算</div>
+  </header>
+
+  <div class="tabs reveal">
+    <div class="tab active" data-p="p1">① 坐标正算</div>
+    <div class="tab" data-p="p2">② 坐标反算</div>
+    <div class="tab" data-p="p3">③ 平曲线（里程→坐标）</div>
+    <div class="tab" data-p="p4">④ 断链换算</div>
+  </div>
+
+  <!-- ① 坐标正算 -->
+  <div class="panel active" id="p1">
+    <div class="row">
+      <div class="fld"><label>起点 X（北向 / m）</label><input id="z_x" type="number" step="any" value="3850123.456"></div>
+      <div class="fld"><label>起点 Y（东向 / m）</label><input id="z_y" type="number" step="any" value="512345.678"></div>
+      <div class="fld"><label>方位角 α（度，0~360）</label><input id="z_az" type="number" step="any" value="45.0000"></div>
+      <div class="fld"><label>距离 D（m）</label><input id="z_d" type="number" step="any" value="100.000"></div>
+    </div>
+    <button class="btn" onclick="doForward()">计算终点坐标</button>
+    <div class="out" id="o1">点击上方按钮计算。</div>
+    <div class="note">公式：X₂ = X₁ + D·cosα，Y₂ = Y₁ + D·sinα（X 为北向纵坐标，Y 为东向横坐标，方位角自北顺时针）。</div>
+  </div>
+
+  <!-- ② 坐标反算 -->
+  <div class="panel" id="p2">
+    <div class="row">
+      <div class="fld"><label>点1 X（北向 / m）</label><input id="f_x1" type="number" step="any" value="3850123.456"></div>
+      <div class="fld"><label>点1 Y（东向 / m）</label><input id="f_y1" type="number" step="any" value="512345.678"></div>
+      <div class="fld"><label>点2 X（北向 / m）</label><input id="f_x2" type="number" step="any" value="3850193.456"></div>
+      <div class="fld"><label>点2 Y（东向 / m）</label><input id="f_y2" type="number" step="any" value="512415.678"></div>
+    </div>
+    <button class="btn" onclick="doInverse()">计算方位角与距离</button>
+    <div class="out" id="o2">点击上方按钮计算。</div>
+    <div class="note">公式：D = √[(ΔX)²+(ΔY)²]，α = atan2(ΔY, ΔX)（结果归算到 0~360°）。</div>
+  </div>
+
+  <!-- ③ 平曲线 -->
+  <div class="panel" id="p3">
+    <div class="row">
+      <div class="fld"><label>ZH 点 X（北向 / m）</label><input id="c_zx" type="number" step="any" value="3850000.000"></div>
+      <div class="fld"><label>ZH 点 Y（东向 / m）</label><input id="c_zy" type="number" step="any" value="512000.000"></div>
+      <div class="fld"><label>ZH 切线方位角（度）</label><input id="c_az0" type="number" step="any" value="0.0000"></div>
+      <div class="fld"><label>圆曲线半径 R（m）</label><input id="c_R" type="number" step="any" value="800.000"></div>
+    </div>
+    <div class="row">
+      <div class="fld"><label>缓和曲线长 Ls（m，无则填 0）</label><input id="c_Ls" type="number" step="any" value="60.000"></div>
+      <div class="fld"><label>路线转角 α（度，正值）</label><input id="c_alpha" type="number" step="any" value="25.0000"></div>
+      <div class="fld"><label>转向</label>
+        <select id="c_dir"><option value="1">右转 (+)</option><option value="-1">左转 (−)</option></select>
+      </div>
+      <div class="fld"><label>求算里程 L（自 ZH 起算 / m）</label><input id="c_l" type="number" step="any" value="200.000"></div>
+    </div>
+    <button class="btn" onclick="doCurve()">计算该点坐标</button>
+    <div class="out" id="o3">点击上方按钮计算。</div>
+    <div class="note">采用带缓和曲线的圆曲线标准模型（切线支距法 + 旋转）。
+      缓和段：x = l − l⁵/(40R²Ls²)，y = ±l³/(6RLs)；圆曲线段：以 HY 为起点按弧长递推。
+      <b>理论计算，实际放样请以专业软件复核。</b></div>
+  </div>
+
+  <!-- ④ 断链换算 -->
+  <div class="panel" id="p4">
+    <div class="row">
+      <div class="fld"><label>断链点「断链前」桩号</label><input id="d_bk" type="number" step="any" value="11350.000"></div>
+      <div class="fld"><label>断链点「断链后」桩号</label><input id="d_ak" type="number" step="any" value="11350.049"></div>
+      <div class="fld"><label>待换算桩号（断链前）</label><input id="d_m" type="number" step="any" value="11500.000"></div>
+    </div>
+    <button class="btn" onclick="doChain()">换算</button>
+    <div class="out" id="o4">点击上方按钮计算。</div>
+    <div class="note">本例对应你高铁线路 JD8 前短链：断链前 11350.000 → 断链后 11350.049（短链 0.049 m）。
+      换算关系：断链后 = 断链前 + (断链后桩号 − 断链前桩号)，适用于该断链点之后的里程。</div>
+  </div>
+
+  <footer>冯建峰 · 测量小工具 · 纯前端计算 · fengjianfeng.me</footer>
+</div>
+
+<script>
+(function(){
+  var b=document.body, btn=document.getElementById('themeBtn'), txt=document.getElementById('themeTxt');
+  if(localStorage.getItem('ff_theme')==='dark'){b.classList.add('dark');txt.textContent='☀️ 亮色';}
+  btn.onclick=function(){b.classList.toggle('dark');var d=b.classList.contains('dark');
+    txt.textContent=d?'☀️ 亮色':'🌙 暗色';localStorage.setItem('ff_theme',d?'dark':'light');};
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  var tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.panel');
+  tabs.forEach(function(t){t.onclick=function(){tabs.forEach(x=>x.classList.remove('active'));panels.forEach(p=>p.classList.remove('active'));
+    t.classList.add('active');document.getElementById(t.dataset.p).classList.add('active');};});
+})();
+
+var DEG=Math.PI/180, R2D=180/Math.PI;
+function toGlobal(lx,ly,psiDeg,ox,oy){var p=psiDeg*DEG;
+  return {x:ox+lx*Math.cos(p)-ly*Math.sin(p), y:oy+lx*Math.sin(p)+ly*Math.cos(p)};}
+function fmt(v){return (Math.round(v*1000)/1000).toLocaleString('en-US',{minimumFractionDigits:3,maximumFractionDigits:3});}
+
+// ① 正算
+function doForward(){
+  var x=+z_x.value,y=+z_y.value,az=+z_az.value,d=+z_d.value;
+  if([x,y,az,d].some(isNaN)){o1.className='out err';o1.textContent='请填写有效的数字。';return;}
+  var a=az*DEG, X=x+d*Math.cos(a), Y=y+d*Math.sin(a);
+  o1.className='out';
+  o1.textContent='终点坐标：\n  X = '+fmt(X)+'  m\n  Y = '+fmt(Y)+'  m';
+}
+
+// ② 反算
+function doInverse(){
+  var x1=+f_x1.value,y1=+f_y1.value,x2=+f_x2.value,y2=+f_y2.value;
+  if([x1,y1,x2,y2].some(isNaN)){o2.className='out err';o2.textContent='请填写有效的数字。';return;}
+  var dx=x2-x1,dy=y2-y1,D=Math.hypot(dx,dy),az=Math.atan2(dy,dx)/DEG; if(az<0)az+=360;
+  o2.className='out';
+  o2.textContent='方位角 α = '+fmt(az)+' °\n距离   D = '+fmt(D)+'  m';
+}
+
+// ③ 平曲线
+function doCurve(){
+  var zx=+c_zx.value,zy=+c_zy.value,az0=+c_az0.value,R=+c_R.value,
+      Ls=+c_Ls.value,alphaDeg=+c_alpha.value,dir=+c_dir.value,l=+c_l.value;
+  if([zx,zy,az0,R,Ls,alphaDeg,l].some(isNaN)||R<=0){o3.className='out err';o3.textContent='请检查输入（半径需>0）。';return;}
+  var r=curvePoint(zx,zy,az0,R,Ls,dir,alphaDeg,l);
+  if(r.err){o3.className='out err';o3.textContent=r.err;return;}
+  o3.className='out';
+  o3.textContent='该点坐标：\n  X = '+fmt(r.x)+'  m\n  Y = '+fmt(r.y)+'  m\n  切线方位角 = '+fmt(r.bearing)+' °';
+}
+function curvePoint(zx,zy,az0,R,Ls,dir,alphaDeg,l){
+  var az0r=az0*DEG, ar=alphaDeg*DEG;
+  var beta0=Ls>0?Ls/(2*R):0, p=Ls>0?Ls*Ls/(24*R):0, q=Ls>0?Ls/2-Ls*Ls*Ls/(240*R*R):0;
+  var T=(R+p)*Math.tan(ar/2)+q, Ly=R*(ar-2*beta0), Ltot=2*Ls+Ly;
+  if(l<0||l>Ltot) return {err:'里程超出曲线范围 [0, '+Ltot.toFixed(3)+'] m'};
+  // HZ 全局
+  var JDx=zx+T*Math.cos(az0r), JDy=zy+T*Math.sin(az0r);
+  var aze=az0r+dir*ar, HZx=JDx+T*Math.cos(aze), HZy=JDy+T*Math.sin(aze);
+  // HY 全局（缓和段1 末点）
+  var HYx,HYy,azhy;
+  if(Ls>0){var xh=Ls-Math.pow(Ls,5)/(40*R*R*Ls*Ls), yh=dir*(Math.pow(Ls,3)/(6*R*Ls));
+    var g=toGlobal(xh,yh,az0,zx,zy); HYx=g.x; HYy=g.y; azhy=az0r+dir*beta0;}
+  else {HYx=zx; HYy=zy; azhy=az0r;}
+  if(Ls>0 && l<=Ls){
+    var xl=l-Math.pow(l,5)/(40*R*R*Ls*Ls), yl=dir*(Math.pow(l,3)/(6*R*Ls));
+    var g1=toGlobal(xl,yl,az0,zx,zy);
+    return {x:g1.x,y:g1.y,bearing:az0+dir*R2D*(l*l/(2*R*Ls))};
+  } else if(Ls===0 || l<=Ls+Ly+1e-6){
+    var lc=l-Ls, phi=lc/R, lx=R*Math.sin(phi), ly=dir*R*(1-Math.cos(phi));
+    var g2=toGlobal(lx,ly,R2D*azhy,HYx,HYy);
+    return {x:g2.x,y:g2.y,bearing:az0+dir*R2D*(beta0+phi)};
+  } else {
+    var u=l-(Ls+Ly), xe=u-Math.pow(u,5)/(40*R*R*Ls*Ls), ye=dir*(Math.pow(u,3)/(6*R*Ls));
+    var g3=toGlobal(xe,ye,R2D*aze,HZx,HZy);
+    return {x:g3.x,y:g3.y,bearing:az0+dir*R2D*(ar)-dir*R2D*(u*u/(2*R*Ls))};
+  }
+}
+
+// ④ 断链
+function doChain(){
+  var bk=+d_bk.value,ak=+d_ak.value,m=+d_m.value;
+  if([bk,ak,m].some(isNaN)){o4.className='out err';o4.textContent='请填写有效的数字。';return;}
+  var off=ak-bk, res=m+off;
+  o4.className='out';
+  o4.textContent='断链差值 = '+(off>=0?'+':'')+fmt(off)+' m（'+(off>=0?'长链/断链后更大':'短链')+'）\n换算后桩号 = '+fmt(res)+'  m';
+}
+</script>
+</body>
+</html>
